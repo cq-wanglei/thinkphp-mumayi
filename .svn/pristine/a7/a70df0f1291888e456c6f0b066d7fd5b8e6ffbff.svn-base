@@ -1,0 +1,3 @@
+RewriteBase /
+RewriteEngine On
+RewriteRule ^/data1/www/htdocs/492/www/1/(.*[^images|js|css])$ index.php?id=$1

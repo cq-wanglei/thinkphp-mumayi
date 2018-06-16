@@ -1,0 +1,2 @@
+RewriteEngine On
+RewriteRule ^(.*[^images|js|css])$ index.php

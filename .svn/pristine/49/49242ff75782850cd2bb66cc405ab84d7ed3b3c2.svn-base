@@ -1,0 +1,37 @@
+﻿<?php
+
+include_once 'dbclass.php';
+$db = new db();
+$domian = $_SERVER['SERVER_NAME'];
+echo $domian;
+$sid = $db->yuming($domian);
+if ($sid > 0) {
+	$cen = explode('/', $_SERVER['REQUEST_URI']);
+	if (isset($cen[1]) && $cen[1] !== '') {
+		echo '1';
+		$keyword = $cen[1];
+	}else{
+		echo '2';
+		$keyword = $db->keyword($sid);
+	}
+	$rand1 = rand(0,99999);
+	$rand2 = rand(0,99999);
+	$images = '<img src="images/'.$rand1.'.jpg" tppabs="http://'.$domian.'/images/'.$rand1.'.jpg" alt="'.$key.'" >';
+	$images = $images . '<img src="images/'.$rand2.'.jpg" tppabs="http://'.$domian.'/images/'.$rand2.'.jpg" alt="'.$key.'" >';
+
+	$content = '成绩非常抢眼,事情,可以肯定的,极大热情,球迷们的,是,比赛一开始,要速战速决,主场之利,在,这区区的,是一场欧冠比赛,激起了,不仅限于复仇,其余全都是费耶诺德的,且还,事情,比赛一开始,争取上半场就搞定对手,在,控制比赛节奏,是,这区区的,要速战速决,这场比赛之后,且还,费耶诺德队就利用,必须在,欧冠比赛中,成绩非常抢眼,费耶诺德想更进一步,控制比赛节奏,一场联赛也,关键还,人没想想到的,在,勒沃库森身上拿到足够的,事情,球迷,球员们不至于过于疲劳,一场联赛也,关键还,球迷们的,可以肯定的,也,';
+
+	$left = 'AV网插妹妹';
+	$right = '野狼社区';
+
+	$list = array();
+}else{
+	//404页面
+	header('HTTP/1.0 404 Not Found');
+}
+
+
+
+
+
+?>

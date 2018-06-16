@@ -1,0 +1,49 @@
+<?php
+
+/**
+* 
+*/
+class db{
+	//链接数据库句柄
+	private $con;
+	/*
+		初始化链接数据库
+	*/
+	public function __construct(){
+		$this->con = mysqli_connect(SAE_MYSQL_HOST_M,SAE_MYSQL_USER,SAE_MYSQL_PASS,	SAE_MYSQL_DB) or die("连接失败！！") ;
+		$sql = "set names utf8";
+		$res = mysqli_query($this->con,$sql);
+	}
+	/*
+		执行数据库
+	*/
+	public function my_exec($sql){
+		$res = mysqli_query($this->con,$sql);
+		return $res;
+	}
+	/*
+		查询域名是否存在
+	*/
+	public function yuming($domian){
+		
+	}
+
+	/*
+		结束断开数据库
+	*/
+	public function _destruct(){
+		mysqli_close($con);
+	}
+
+
+}
+
+
+
+
+
+
+
+
+
+?>

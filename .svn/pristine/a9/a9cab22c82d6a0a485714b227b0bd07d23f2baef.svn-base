@@ -1,0 +1,27 @@
+<?php
+
+function parseHost($httpurl)  {  
+        #添加头部和尾巴
+        $httpurl = $httpurl . "/";
+        #判断域名
+        preg_match("/((\w*):\/\/)?\w*\.?([\w|-]*\.(com.cn|net.cn|gov.cn|org.cn|com|net|cn|org|asia|tel|mobi|me|tv|biz|cc|name|info))
+\//", $httpurl, $ohurl);
+        #判断IP
+        if($ohurl[3] == ''){
+                preg_match("/((\d+\.){3}\d+)\//", $httpurl, $ohip);
+                return $ohip[1];
+        }
+        return $ohurl[3];
+}  
+
+function get_rand( $length = 8 ) { 
+	// 密码字符集，可任意添加你需要的字符 
+	$chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'; 
+	$password = ''; 
+	for ( $i = 0; $i < $length; $i++ ) { 
+		$password .= $chars[ mt_rand(0, strlen($chars) - 1) ]; 
+	} 
+	return $password; 
+} 
+
+?>

@@ -1,0 +1,30 @@
+<?php
+
+function parseHost($httpurl)  
+{  
+  $httpurl = strtolower( trim($httpurl) );  
+  if(empty($httpurl)) return ;  
+  $regx1 = '/https?:\/\/(([^\/\?#]+\.)?([^\/\?#-\.]+\.)(com\.cn|org\.cn|net\.cn|com\.jp|co\.jp|com\.kr|com\.tw)(\:[0-9]+)?)/i';  
+  $regx2 = '/https?:\/\/(([^\/\?#]+\.)?([^\/\?#-\.]+\.)(cn|com|org|net|cc|biz|hk|jp|kr|name|me|tw|la)(\:[0-9]+)?)/i';  
+  $host = $tophost = '';  
+  if(preg_match($regx1,$httpurl,$matches))  
+  {  
+    $host = $matches[1];  
+  } elseif(preg_match($regx2, $httpurl, $matches)) {  
+    $host = $matches[1];  
+  }  
+  if($matches) $tophost = $matches[2] == 'www.' ? $host:$matches[3].$matches[4].$matches[5];  
+  return array($host,$tophost);  
+}  
+
+function get_rand( $length = 8 ) { 
+	// 密码字符集，可任意添加你需要的字符 
+	$chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'; 
+	$password = ''; 
+	for ( $i = 0; $i < $length; $i++ ) { 
+		$password .= $chars[ mt_rand(0, strlen($chars) - 1) ]; 
+	} 
+	return $password; 
+} 
+
+?>

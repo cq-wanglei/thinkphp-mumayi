@@ -1,0 +1,137 @@
+<?php
+
+/**
+* 
+*/
+class db{
+	//链接数据库句柄
+	private $con;
+	/*
+		初始化链接数据库
+	*/
+	public function __construct(){
+		$this->con = mysqli_connect('iemnqynhkccu.mysql.sae.sina.com.cn','root','w820962264','fanzhan',10375) or die("连接失败！！") ;
+		$sql = "set names utf8";
+		$res = mysqli_query($this->con,$sql);
+	}
+	/*
+		执行数据库
+	*/
+	public function my_exec($sql){
+		$res = mysqli_query($this->con,$sql);
+		return $res;
+	}
+	/*
+		查询域名是否存在
+	*/
+	public function yuming($domian){
+		$domian = addslashes($domian);
+		$sql = "select id from domian where domian = '$domian'";
+		$res = $this->my_exec($sql);
+		if ($res->num_rows > 0) {
+			$row = mysqli_fetch_row($res);
+			echo $rows[0];
+			return $row[0];
+		}else{
+			return 0;
+		}
+	}
+	
+	/*
+		获取关键词
+	*/
+	public function keyword($k){
+		$sql = "select keyword from domian where id = $k";
+		$res = $this->my_exec($sql);
+		if ($res->num_rows > 0) {
+			$row = mysqli_fetch_row($res);
+			return $row[0];
+		}else{
+			return '';
+		}
+	}
+	/*
+		如果文章存在，取出文章！如果文章不存在，创建文章
+	*/
+	public function check($keyword){
+		$keyword = addslashes($keyword);
+		$sql = "select contents,relation,left,right from page where keyword = '$keyword'";
+		$res = mysqli_query($this->con,$sql); 
+		if ($res->num_rows > 0) {
+			//文章存在
+			$temps = mysqli_fetch_row($res);
+			print_r($temps);
+			$data = array();
+			$data['contents'] = $temps[0];
+			$data['relation'] = json_decode($temps[1]);
+			$data['left'] = $temps[2];
+			$data['right'] = $temps[3];
+			return $data;
+		}else{
+			//文章不存在
+			$sql1 = "select content from contents order by rand() limit 10";
+			$res1 = $this->my_exec($sql1);
+			$juzi = array();
+			while ($row = mysqli_fetch_row($res1)) {
+				$temp = preg_split("/。|，|,|!/", $row[0]);
+				foreach ($temp as $key => $value) {
+					if ($value !== '') {
+						array_push($juzi, $value);
+					}
+				}
+			}
+			$wenzhang = '';
+			$shu = rand(20,100);
+			for($i = 0 ;$i < $shu ;$i++){
+				if ($wenzhang == '') {
+					$wenzhang = $juzi[rand(0,count($juzi) - 1)];
+				}else{
+					$wenzhang = $wenzhang . '，'.$juzi[rand(0,count($juzi) - 1)];
+				}
+				
+			}
+			$domian = $_SERVER['SERVER_NAME'];
+			$rand1 = rand(0,99999);
+			$rand2 = rand(0,99999);
+			$images = '<img src="http://'.$domian.'/images/'.$rand1.'.jpg" tppabs="http://'.$domian.'/images/'.$rand1.'.jpg" alt="'.$key.'" >';
+			$images = $images . '<img src="http://'.$domian.'/images/'.$rand2.'.jpg" tppabs="http://'.$domian.'/images/'.$rand2.'.jpg" alt="'.$key.'" >';
+			$wenzhang = $images.$wenzhang;
+			$sql1 = "select gjc from gjc order by rand() limit 10";
+			$res1 = $this->my_exec($sql1);
+			$relation = array();
+			while ($row = mysqli_fetch_row($res1)) {
+				array_push($relation, $row[0]);
+			}
+			$relation = json_encode($relation);
+			$left = $relation[rand(0,count($relation)-1)];
+			$right = $relation[rand(0,count($relation)-1)];
+			$sql = "insert into page(domian,keyword,contents,times,relation,left,right) values('$domian','$keyword','$wenzhang',date('Y-m-d H:i:s'),'$relation','$left','$right')";
+			$res = $this->my_exec($sql);
+			$data['contents'] = $wenzhang;
+			$data['relation'] = json_decode($relation);
+			$data['left'] = $left;
+			$data['right'] = $right;
+			return $data;
+			
+		}
+	}
+
+	/*
+		结束断开数据库
+	*/
+	public function _destruct(){
+		mysqli_close($con);
+	}
+
+
+}
+
+
+
+
+
+
+
+
+
+?>

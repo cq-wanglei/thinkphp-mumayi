@@ -1,0 +1,58 @@
+<?php
+
+/**
+* 
+*/
+class db{
+	//链接数据库句柄
+	private $con;
+	/*
+		初始化链接数据库
+	*/
+	public function __construct(){
+		$this->con = mysqli_connect('iemnqynhkccu.mysql.sae.sina.com.cn','root','w820962264','fanzhan',10375) or die("连接失败！！") ;
+		$sql = "set names utf8";
+		$res = mysqli_query($this->con,$sql);
+	}
+	/*
+		执行数据库
+	*/
+	public function my_exec($sql){
+		$res = mysqli_query($this->con,$sql);
+		return $res;
+	}
+	/*
+		查询域名是否存在
+	*/
+	public function yuming($domian){
+		$domian = addslashes($domian);
+		$sql = "select id from domian where domian = '$domian'";
+		$res = $this->my_exec($sql);
+		print_r($res);
+		if ($res->num_rows > 0) {
+			$row = mysqli_fetch_row($res);
+			return $row;
+		}else{
+			return 0;
+		}
+	}
+
+	/*
+		结束断开数据库
+	*/
+	public function _destruct(){
+		mysqli_close($con);
+	}
+
+
+}
+
+
+
+
+
+
+
+
+
+?>
